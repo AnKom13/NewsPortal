@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     #подключение плоских страниц
     'django.contrib.sites',
     'django.contrib.flatpages',
+
+    'news',
 ]
 
 SITE_ID = 1
