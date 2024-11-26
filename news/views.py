@@ -24,6 +24,11 @@ class PostList(ListView):
     # Для этого реализован этот фильтр. Если его убрать, тогда queryset вернет все записи
     queryset = Post.objects.all().filter(property='N')
 
+    #количество записей на странице
+    paginate_by = 2
+
+
+
 
 # Использовал этот класс, пока не переделал через функцию detail
 # class PostDetail(DetailView):
@@ -39,3 +44,5 @@ class PostList(ListView):
 def detail(request, pk):
     post = Post.objects.get(pk__exact=pk)
     return render(request, 'post.html', context={'post': post})
+
+
