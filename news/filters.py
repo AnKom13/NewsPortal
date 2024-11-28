@@ -1,5 +1,7 @@
 # import django_filters
 # from django_filters import FilterSet
+import django_filters
+
 from .models import Post, Category
 
 # Создаем свой набор фильтров для модели Post
@@ -9,7 +11,7 @@ from django_filters import FilterSet, DateTimeFilter, CharFilter, ModelMultipleC
 from django.forms import DateTimeInput
 
 
-class NewsFilter(FilterSet):
+class PostsFilter(FilterSet):
     heading = CharFilter(field_name='heading', label='Шапка', lookup_expr='icontains')
     time_after = DateTimeFilter(
         label='Дата создания после:',
@@ -41,18 +43,29 @@ class NewsFilter(FilterSet):
 #     }
 
 
-class ArticlesFilter(FilterSet):
+class Posts_Filter(FilterSet):
     # Т.к. в ТЗ поисковая форма нужна только для новостей, сделал доп. форму для Статей (уже через Meta) для наглядности
+
     class Meta:
         # В Meta классе мы должны указать Django модель,
         # в которой будем фильтровать записи.
         model = Post
         # В fields мы описываем по каким полям модели
+        #fields = ['heading', 'category', 'rate']
+        #labels = {'heading' : '1', 'category' : '2','rate' : '3'}
+
         # будет производиться фильтрация.
         fields = {
-            # поиск по названию
-            'heading': ['icontains'],
-            'category': ['exact'],
-            # рейтинг  меньше или больше ( 2 поля)
-            'rate': ['lt', 'gt'],
+             # поиск по названию
+             'heading': ['icontains'],
+             'category': ['exact'],
+             # рейтинг  меньше или больше ( 2 поля)
+             'rate': ['lt', 'gt'],
         }
+        #
+        # fields = ['field1', 'field2', 'field3']
+        # labels = {
+        #     'field1': 'Custom Label 1',
+        #     'field2': 'Custom Label 2',
+        #     'field3': 'Custom Label 3'
+        # }

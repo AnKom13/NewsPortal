@@ -32,7 +32,7 @@ Post
                <!-- Накладываю фильтр -->
                <td>
 
-                   <a href="{% url 'det' pk=p.id %}">{{ p.heading }} </a>
+                   <a href="{% url 'news_detail' pk=p.id %}">{{ p.heading }} </a>
                </td>
                <td>{{ p.time_create|date:'d.m.Y' }}</td>
                <!-- вывод первых 20 символов поля. Можно было переделать через preview и вызвать p.preview -->

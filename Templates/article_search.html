@@ -7,12 +7,12 @@ Post
 {% endblock title %}
 
 {% block content %}
-   <h1>Все новости</h1>
+   <h1>Все статьи</h1>
    <hr>
    {# Добавляем форму, которая  объединяет набор полей, которые будут отправляться в запросе #}
    <form action="" method="get">
        {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
-       {{ filterset.form.as_p }}
+       <table>{{ filterset.form.as_table }}</table>
        {# Добавим кнопку отправки данных формы #}
        <input type="submit" value="Найти" />
    </form>
@@ -20,7 +20,7 @@ Post
 
 
    {% if post %}
-       <h3> Количество новостей: {{ post|length }}</h3>
+       <h3> Количество статей: {{ post|length }}</h3>
        <table>
            <tr>
                <td>Заголовок</td>
@@ -32,7 +32,7 @@ Post
                <!-- Накладываю фильтр -->
                <td>
 
-                   <a href="{% url 'det' pk=p.id %}">{{ p.heading }} </a>
+                   <a href="{% url 'article_detail' pk=p.id %}">{{ p.heading }} </a>
                </td>
                <td>{{ p.time_create|date:'d.m.Y' }}</td>
                <!-- вывод первых 20 символов поля. Можно было переделать через preview и вызвать p.preview -->
@@ -72,7 +72,7 @@ Post
 
 
    {% else %}
-       <h2>Новостей нет!</h2>
+       <h2>Статей нет!</h2>
    {% endif %}
 {% endblock content %}
 

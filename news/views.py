@@ -1,10 +1,14 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 
 # Create your views here.
 
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+
+from .filters import PostsFilter
+from .forms import NewsForm, ArticleForm
 from .models import Post
 
 
@@ -24,10 +28,26 @@ class PostList(ListView):
     # Для этого реализован этот фильтр. Если его убрать, тогда queryset вернет все записи
     queryset = Post.objects.all().filter(property='N')
 
-    #количество записей на странице
-    paginate_by = 2
+    # количество записей на странице
+    paginate_by = 5
 
+    def get_queryset(self):
+        # Получаем обычный запрос
+        queryset = super().get_queryset()
+        # Используем наш класс фильтрации.
+        # self.request.GET содержит объект QueryDict, который мы рассматривали
+        # в этом юните ранее.
+        # Сохраняем нашу фильтрацию в объекте класса,
+        # чтобы потом добавить в контекст и использовать в шаблоне.
+        self.filterset = PostsFilter(self.request.GET, queryset)
+        # Возвращаем из функции отфильтрованный список товаров
+        return self.filterset.qs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем в контекст объект фильтрации.
+        context['filterset'] = self.filterset
+        return context
 
 
 # Использовал этот класс, пока не переделал через функцию detail
@@ -46,3 +66,110 @@ def detail(request, pk):
     return render(request, 'post.html', context={'post': post})
 
 
+# Классы новости
+class NewsCreate(CreateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'news_edit.html'
+
+
+class NewsList(ListView):
+    model = Post
+    ordering = '-time_create'
+    template_name = 'news_list.html'
+    context_object_name = 'post'
+    queryset = Post.objects.all().filter(property='N')
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostsFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+
+class NewsSearch(ListView):
+    model = Post
+    ordering = '-time_create'
+    template_name = 'news_search.html'
+    context_object_name = 'post'
+    queryset = Post.objects.all().filter(property='N')
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostsFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+        return context
+
+
+class NewsDelete(DeleteView):
+    model = Post
+    template_name = 'news_delete.html'
+    success_url = reverse_lazy('news')
+
+
+class NewsEdit(UpdateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'news_edit.html'
+
+
+# классы Статей
+class ArticleCreate(CreateView):
+    form_class = ArticleForm
+    model = Post
+    template_name = 'article_edit.html'
+
+
+class ArticlesList(ListView):
+    model = Post
+    ordering = '-time_create'
+    template_name = 'articles_list.html'
+    context_object_name = 'post'
+    queryset = Post.objects.all().filter(property='A')
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostsFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        context['filterset'] = self.filterset
+#        return context
+
+
+class ArticleSearch(ListView):
+    model = Post
+    ordering = '-time_create'
+    template_name = 'article_search.html'
+    context_object_name = 'post'
+    queryset = Post.objects.all().filter(property='A')
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostsFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+        return context
+
+
+class ArticleDelete(DeleteView):
+    model = Post
+    template_name = 'article_delete.html'
+    success_url = reverse_lazy('articles')
+
+class ArticleEdit(UpdateView):
+    form_class = ArticleForm
+    model = Post
+    template_name = 'article_edit.html'
