@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
@@ -11,6 +13,10 @@ from .filters import PostsFilter
 from .forms import NewsForm, ArticleForm
 from .models import Post
 
+@login_required
+def detail(request, pk):
+    post = Post.objects.get(pk__exact=pk)
+    return render(request, 'post.html', context={'post': post})
 
 class PostList(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -61,13 +67,13 @@ class PostList(ListView):
 #    context_object_name = 'post'
 
 
-def detail(request, pk):
-    post = Post.objects.get(pk__exact=pk)
-    return render(request, 'post.html', context={'post': post})
+
 
 
 # Классы новости
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    raise_exception = True
+    permission_required = ('news.add_post',)
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
@@ -119,7 +125,9 @@ class NewsEdit(UpdateView):
 
 
 # классы Статей
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    raise_exception = True
+    permission_required = ('news.add_post',)
     form_class = ArticleForm
     model = Post
     template_name = 'article_edit.html'

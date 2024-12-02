@@ -19,8 +19,12 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+#отключил, т.к. делаю вход через allauth
+#    path('accounts/', include('django.contrib.auth.urls')),
+#    path("accounts/", include("accounts.urls")),
+    path("accounts/", include("allauth.urls")),
     path('pages/', include('django.contrib.flatpages.urls')),
-    path('about/', include('django.contrib.flatpages.urls')),
+#    path('about/', include('django.contrib.flatpages.urls')),
     path('', include('news.urls')),
 
 ]
