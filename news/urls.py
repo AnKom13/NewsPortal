@@ -2,7 +2,7 @@ from django.urls import path, include
 from news.views import PostList,NewsCreate, NewsList, NewsSearch, NewsDelete, NewsEdit
 from news.views import ArticlesList, ArticleCreate, ArticleSearch, ArticleDelete,ArticleEdit
 #from news.views import PostDetail
-from news.views import detail
+from news.views import detail, subscriptions
 
 urlpatterns = [
 #    path('', PostList.as_view()),
@@ -29,6 +29,7 @@ urlpatterns = [
     path('article/<int:pk>/delete/', ArticleDelete.as_view(), name='article_delete'),
     path('article/<int:pk>/edit/', ArticleEdit.as_view(), name='article_edit'),
     path('article/create/', ArticleCreate.as_view(), name='article_create'),
+    path('subscriptions/', subscriptions, name='subscriptions'),
 #    # после успешного сохранения откроется детальная инфа о посте
 #    path('news/<int:pk>/edit/', NewsEdit.as_view(), name='news_edit'),
 #    path('news/<int:pk>/delete/', NewsDelete.as_view(), name='post_delete'),

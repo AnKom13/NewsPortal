@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,19 +36,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #подключение плоских страниц
+    # подключение плоских страниц
     'django.contrib.sites',
     'django.contrib.flatpages',
 
-    #подключение allauth
+    # подключение allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
     'allauth.socialaccount.providers.google',
 
+
+
     'news',
     'django_filters',
+    "django_apscheduler",
 ]
 
 LOGIN_URL = '/accounts/login/'
@@ -81,7 +82,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-#                'django.template.context_processors.request',
+                #                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
@@ -92,7 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -102,7 +102,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -138,7 +137,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -158,7 +156,45 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
 
 LOGIN_REDIRECT_URL = '/pages'
+
+# 45c82dcfb34eba8a5cca97b63e2389cf
+
+# здесь указываем уже свою ПОЛНУЮ почту, с которой будут отправляться письма
+DEFAULT_FROM_EMAIL = 'ankom888@yandex.ru'
+
+# адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_HOST = 'smtp.yandex.ru'
+
+# порт smtp сервера тоже одинаковый
+EMAIL_PORT = 465
+
+# ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_USER = 'ankom888'
+
+# пароль от почты (Это не пароль электронной почты, а код авторизации)
+EMAIL_HOST_PASSWORD = 'pixlyxzaswkxqqsl'
+
+# Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
+EMAIL_USE_SSL = True
+
+# мыло от которого будет происходить авто рассылка менеджерам
+SERVER_EMAIL = 'ankom888@yandex.ru'
+
+#префикс в теме письма при рассылке mail_managers (По умолчанию Django)
+EMAIL_SUBJECT_PREFIX = '!!!'
+
+
+MANAGERS = (
+    ('Ivan', 'ivan48@yandex.ru'),
+#    ('Andrey', 'ankom888@yandex.ru')
+    ('Andrey', 'ankom@list.ru')
+)
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SITE_URL = 'http://127.0.0.1:8000'
