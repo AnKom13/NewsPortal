@@ -1,25 +1,56 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
+from django.http import HttpResponse
+
 from django.shortcuts import render
 from django.urls import reverse_lazy
+
 from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
 
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
 
 from .filters import PostsFilter
 from .forms import NewsForm, ArticleForm
 from .models import Post
 from .models import Subscriber, Category
 
+
 @login_required
 def detail(request, pk):
     post = Post.objects.get(pk__exact=pk)
     return render(request, 'post.html', context={'post': post})
+
+from django.views import View
+from .tasks import hello
+#import time
+# class IndexView(View):
+#     def get(self,request):
+# #        time.sleep(10)
+# #        hello.delay(10)
+#         hello.delay()
+#         return HttpResponse('Za_ra_bo_ta_lo!!!')
+
+# class IndexView(TemplateView):
+#   template_name = 'post_list.html'
+#   def get_context_data(self, **kwargs):
+#     context = super(IndexView, self).get_context_data(**kwargs)
+#     hello()
+#     return context
+
+
+class IndexView(View):
+    def get(self, request):
+#        hello()
+        hello.delay()
+#        hello.apply_async()
+        return HttpResponse('Hello!')
+
+
 
 class PostList(ListView):
     # Указываем модель, объекты которой мы будем выводить
