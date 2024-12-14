@@ -1,10 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse
 
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.decorators.cache import cache_page
 
 from django.views.decorators.csrf import csrf_protect
 
@@ -20,6 +21,7 @@ from .models import Post
 from .models import Subscriber, Category
 
 
+@cache_page(60*5)
 @login_required
 def detail(request, pk):
     post = Post.objects.get(pk__exact=pk)
