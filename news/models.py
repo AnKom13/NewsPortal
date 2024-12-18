@@ -90,6 +90,9 @@ class Comment(models.Model):
         self.rate -= 1
         self.save()
 
+    @property
+    def quality(self):
+        return self.rate > 0
 
 class Subscriber(models.Model):
     user = models.ForeignKey(
