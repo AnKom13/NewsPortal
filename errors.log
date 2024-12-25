@@ -1,0 +1,27 @@
+2024-12-25 15:54:26,213 ERROR Internal Server Error: /news/23 D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\utils\log.py (<class 'news.models.Post.DoesNotExist'>, DoesNotExist('Post matching query does not exist.'), <traceback object at 0x000001D064973E40>)
+Traceback (most recent call last):
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\newsportal\news\views.py", line 27, in detail
+    post = Post.objects.get(pk__exact=pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\db\models\query.py", line 649, in get
+    raise self.model.DoesNotExist(
+news.models.Post.DoesNotExist: Post matching query does not exist.
+2024-12-25 15:54:26,224 ERROR "GET /news/23 HTTP/1.1" 500 100194 D:\Teach\SF_final\Repeat\.venv\Lib\site-packages\django\core\servers\basehttp.py None

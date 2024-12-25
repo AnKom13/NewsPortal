@@ -103,34 +103,46 @@ WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    },
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'NewsPortal',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
     },
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+{
+    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+},
+{
+    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+},
+{
+    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+},
+{
+    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+},
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+'django.contrib.auth.backends.ModelBackend',
+'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 # Internationalization
@@ -155,7 +167,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+BASE_DIR / "static",
 ]
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -203,9 +215,9 @@ SERVER_EMAIL = 'ankom888@yandex.ru'
 EMAIL_SUBJECT_PREFIX = '!!!'
 
 MANAGERS = (
-    ('Ivan', 'ivan48@yandex.ru'),
-    #    ('Andrey', 'ankom888@yandex.ru')
-    ('Andrey', 'ankom@list.ru'),
+('Ivan', 'ivan48@yandex.ru'),
+#    ('Andrey', 'ankom888@yandex.ru')
+('Andrey', 'ankom@list.ru'),
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -223,10 +235,135 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 # Кеширование
 CACHES = {
-    'default': {
-        'TIMEOUT': 60,  # стандартное время ожидания в минуту (по умолчанию это 5 минут — 300 секунд)
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
-        # куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+'default': {
+    'TIMEOUT': 60,  # стандартное время ожидания в минуту (по умолчанию это 5 минут — 300 секунд)
+    'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+    # куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+},
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'task_1_all': {
+            'format': '{asctime} {levelname} {message}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+        'task_1_warning': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+        'task_1_er_cr': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+        'task_2': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+        'task_3': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+        'task_4': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+        'task_5': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'datetime': '%Y.%m.%d %H:%M:%S',
+            'style': '{',
+        },
+    },
+
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+
+    'handlers': {
+        'console_1_all': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'task_1_all',
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+        },
+        'console_1_warning': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'task_1_warning',
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+        },
+        'console_1_er_cr': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'task_1_er_cr',
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+        },
+        'general': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'task_2',
+            'filters': ['require_debug_false'],
+        },
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'formatter': 'task_3',
+        },
+        'security': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+            'formatter': 'task_4',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'task_5',
+            'filters': ['require_debug_false'],
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['console_1_all', 'console_1_warning', 'console_1_er_cr', 'general'],
+            'level': 'DEBUG'
+        },
+        'django.request': {
+            'handlers': ['errors', 'mail_admins'],
+            'level': 'ERROR'
+        },
+        'django.server': {
+            'handlers': ['errors', 'mail_admins'],
+            'level': 'ERROR'
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'level': 'ERROR'
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'level': 'ERROR'
+        },
+        'django.db.security': {
+            'handlers': ['security'],
+            'level': 'INFO'
+        },
     },
 }
