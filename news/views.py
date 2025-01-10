@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse
+from django.utils.translation import gettext as _
 
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -15,10 +16,23 @@ from django.views.decorators.csrf import csrf_protect
 # что в этом представлении мы будем выводить список объектов из БД
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
 
+#from django.utils.translation import (activate, get_supported_language_variant)
+
+#, LANGUAGE_SESSION_KEY)
+
 from .filters import PostsFilter
 from .forms import NewsForm, ArticleForm
 from .models import Post
 from .models import Subscriber, Category
+
+#==========
+from django.views import View
+from django.http.response import HttpResponse  # импортируем респонс для проверки текста
+
+from django.utils import timezone
+from django.shortcuts import redirect
+
+import pytz  # импортируем стандартный модуль для работы с часовыми поясами
 
 
 @cache_page(60*5)
@@ -27,7 +41,7 @@ def detail(request, pk):
     post = Post.objects.get(pk__exact=pk)
     return render(request, 'post.html', context={'post': post})
 
-from django.views import View
+
 from .tasks import hello
 #import time
 # class IndexView(View):
@@ -44,16 +58,39 @@ from .tasks import hello
 #     hello()
 #     return context
 
-
 class IndexView(View):
     def get(self, request):
+        # .  Translators: This message appears on the home page only
+        string = _('Hello World')
+        context = {
+            'string': string,
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones  # добавляем в контекст все доступные часовые пояса
+        }
+        return HttpResponse(render(request, 'index.html', context))
+
+    #  по пост-запросу будем добавлять в сессию часовой пояс, который и будет обрабатываться написанным нами ранее middleware
+    def post(self, request):
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/')
+
+class IndexViewOld1(View):
+    def get(self, request):
+        string = _('Hello World')
+        context = {
+            'string': string
+        }
+        return HttpResponse(render(request,'index.html', context))
+
+
+class IndexViewOld(View):
+    def get(self, request):
 #        hello()
-        hello.delay()
+#        hello.delay()
 #        hello.apply_async()
-        return HttpResponse('Hello!')
-
-
-
+        string = _('Hello World')
+        str2 = _('Check')
+        return HttpResponse(string)
 class PostList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Post
@@ -101,9 +138,6 @@ class PostList(ListView):
 # Название объекта, в котором будет выбранный пользователем продукт. Далее это название будет использоваться в html
 # если эта переменная не указана, тогда в html вместо {% for p in post %} надо {% for p in object_list %}
 #    context_object_name = 'post'
-
-
-
 
 
 # Классы новости
