@@ -1,3 +1,4 @@
+import django_filters
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
@@ -9,6 +10,13 @@ from django.urls import reverse_lazy
 from django.views.decorators.cache import cache_page
 
 from django.views.decorators.csrf import csrf_protect
+
+from rest_framework import viewsets
+from rest_framework import permissions
+
+from .serializers import *
+from .models import *
+
 
 # Create your views here.
 
@@ -281,3 +289,21 @@ def subscriptions(request):
         'subscriptions.html',
         {'categories': categories_with_subscriptions},
     )
+
+#API
+class PostAPIViewset(viewsets.ModelViewSet):
+   queryset = Post.objects.all()
+
+   serializer_class = PostSerializer
+   filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+   filterset_fields = ["property"]
+
+class CommentAPIViewset(viewsets.ModelViewSet):
+   queryset = Comment.objects.all()
+   serializer_class = CommentSerializer
+   permission_classes = [permissions.AllowAny]
+
+
+class CategoryAPIViewset(viewsets.ModelViewSet):
+   queryset = Category.objects.all()
+   serializer_class = CategorySerializer

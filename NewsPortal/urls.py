@@ -18,6 +18,18 @@ from django.contrib import admin
 from django.urls import include, path
 
 
+from news.views import PostAPIViewset, CommentAPIViewset, CategoryAPIViewset
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+
+router.get_api_root_view().cls.__name__ = "Api for NewsPortal"
+router.get_api_root_view().cls.__doc__ = "Простенькое Api для учебного примера"
+
+router.register(r'post', PostAPIViewset)
+router.register(r'comment', CommentAPIViewset)
+router.register(r'category', CategoryAPIViewset)
+
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')), # подключаем встроенные эндопинты для работы с локализацией
     path('admin/', admin.site.urls),
@@ -27,6 +39,8 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path('pages/', include('django.contrib.flatpages.urls')),
     #    path('about/', include('django.contrib.flatpages.urls')),
-    path('', include('news.urls')),
+#    path('', include('news.urls')),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 ]

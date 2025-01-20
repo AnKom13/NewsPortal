@@ -9,6 +9,8 @@ from news.views import ArticlesList, ArticleCreate, ArticleSearch, ArticleDelete
 from news.views import detail, subscriptions
 from news.views import IndexView
 
+
+
 urlpatterns = [
     #    path('', PostList.as_view()),
     # pk — это первичный ключ товара, который будет выводиться у нас в шаблон
@@ -41,4 +43,5 @@ urlpatterns = [
     #    path('news/<int:pk>/edit/', NewsEdit.as_view(), name='news_edit'),
     #    path('news/<int:pk>/delete/', NewsDelete.as_view(), name='post_delete'),
     #    path('news/search/', include('news.urls_news'), name='news_search'),
+
 ]
